@@ -1,18 +1,35 @@
 <script setup lang="ts">
-import {ref, watch} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {fetchAlbumTracks} from "../api/SpotifyApi";
 import type {AlbumSearch} from "../models/AlbumSearch";
 import type {Track} from "../models/Track";
+import TierListLine from "./TierListLine.vue";
+import TrackPreview from "./TrackPreview.vue";
 
 const tracks = ref<Track[]>([]);
 const sList = ref<Track[]>([]);
+const aList = ref<Track[]>([]);
+const bList = ref<Track[]>([]);
+const cList = ref<Track[]>([]);
+const dList = ref<Track[]>([]);
+
+
 const props = defineProps<{ album: AlbumSearch }>()
 
-
-watch(() => props.album, async () => {
-  console.log(props.album);
+onMounted(async () => {
   tracks.value = await fetchAlbumTracks(props.album.id)
 })
+
+watch(() => props.album, async () => {
+  sList.value = [];
+  aList.value = [];
+  bList.value = [];
+  cList.value = [];
+  dList.value = [];
+  tracks.value = await fetchAlbumTracks(props.album.id)
+})
+
+const group = 'drag-group';
 
 
 </script>
@@ -28,39 +45,20 @@ export default {
 </script>
 
 <template>
-  <div class="bg-zinc-700	text-white">
-    <div class="flex border-b border-white">
-      <div class="bg-purple-700 p-10 w-28 text-center text-xl">S</div>
-      <draggable
-          class="flex flex-wrap w-full"
-          group="toto"
-          v-model="sList"
-          item-key="id">
-        <template #item="{element}">
-          <div class="border w-40 h-40">{{ element.trackNumber }}. {{ element.name }}</div>
-        </template>
-      </draggable>
-    </div>
-    <div class="flex border-white border-b">
-      <div class="bg-green-500 p-10 w-28 text-center text-xl">A</div>
-    </div>
-    <div class="flex border-white border-b">
-      <div class="bg-yellow-400 p-10 w-28 text-center text-xl">B</div>
-    </div>
-    <div class="flex border-white border-b">
-      <div class="bg-orange-400 p-10 w-28 text-center text-xl">C</div>
-    </div>
-    <div class="flex">
-      <div class="bg-red-700 p-10 w-28 text-center text-xl">D</div>
-    </div>
+  <div class="text-white">
+    <TierListLine :drag-group=group letter="S" :list="sList"/>
+    <TierListLine :drag-group=group letter="A" :list="aList"/>
+    <TierListLine :drag-group=group letter="B" :list="bList"/>
+    <TierListLine :drag-group=group letter="C" :list="cList"/>
+    <TierListLine :drag-group=group letter="D" :list="dList"/>
   </div>
   <draggable
-      class="flex flex-wrap	mt-4"
-      group="toto"
+      class="flex flex-wrap	mt-4 cursor-pointer"
+      :group=group
       v-model="tracks"
       item-key="id">
     <template #item="{element}">
-      <div class="border w-40 h-40">{{ element.trackNumber }}. {{ element.name }}</div>
+      <TrackPreview :track="element"/>
     </template>
   </draggable>
 </template>

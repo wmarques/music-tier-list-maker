@@ -35,7 +35,7 @@ async function fetchAlbumsFromApi(search: string, loading: (isLoading: boolean) 
   <v-select :options="results" @search="onSearch" label="name" :filterable="false" v-model="selectedAlbum">
     <template v-slot:option="option: AlbumSearch">
       <div class="flex items-center">
-        <img :src="option.coverUrl"/>
+        <img :src="option.coverUrl" loading="lazy"/>
         {{ option.artist }} - {{ option.name }}
 
       </div>
