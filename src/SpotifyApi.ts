@@ -1,10 +1,7 @@
-import axios, {AxiosInstance} from "axios";
-import {AlbumSearch} from "../models/AlbumSearch";
-import {Track} from "../models/Track";
+import axios, { type AxiosInstance} from "axios";
+import type {AlbumSearch} from "@/models/AlbumSearch";
+import type {Track} from "@/models/Track";
 import pkceChallenge from "pkce-challenge";
-import SearchForItemParameterObject = SpotifyApi.SearchForItemParameterObject;
-import AlbumSearchResponse = SpotifyApi.AlbumSearchResponse;
-import AlbumTracksResponse = SpotifyApi.AlbumTracksResponse;
 
 const tokenStorageKey = 'spotifyToken';
 const challengeStorageKey = 'challenge';
@@ -50,12 +47,12 @@ export async function getToken(code: string) {
 
 
 export async function fetchAlbums(search: string): Promise<AlbumSearch[]> {
-    const queryParams: SearchForItemParameterObject = {
+    const queryParams: SpotifyApi.SearchForItemParameterObject = {
         q: search,
         type: 'album',
         market: 'fr'
     }
-    const response = await spotifyInstance.get<AlbumSearchResponse>('search', {
+    const response = await spotifyInstance.get<SpotifyApi.AlbumSearchResponse>('search', {
         params: queryParams
     })
 
@@ -70,7 +67,7 @@ export async function fetchAlbums(search: string): Promise<AlbumSearch[]> {
 }
 
 export async function fetchAlbumTracks(albumId: string): Promise<Track[]> {
-    const req = await spotifyInstance.get<AlbumTracksResponse>('albums/' + albumId + '/tracks',)
+    const req = await spotifyInstance.get<SpotifyApi.AlbumTracksResponse>('albums/' + albumId + '/tracks',)
     return req.data.items.map(track => {
         return {
             id: track.id, name: track.name, trackNumber: track.track_number

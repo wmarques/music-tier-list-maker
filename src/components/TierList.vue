@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from 'vue'
-import {fetchAlbumTracks} from "../api/SpotifyApi";
-import type {AlbumSearch} from "../models/AlbumSearch";
-import type {Track} from "../models/Track";
+import {fetchAlbumTracks} from "../SpotifyApi";
+import type {AlbumSearch} from "@/models/AlbumSearch";
+import type {Track} from "@/models/Track";
 import TierListLine from "./TierListLine.vue";
 import TrackPreview from "./TrackPreview.vue";
 

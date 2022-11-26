@@ -1,12 +1,10 @@
 <script setup lang="ts">
 
-import {Track} from "../models/Track";
-import {Ref} from "vue";
+import type {Track} from "@/models/Track";
 import TrackPreview from './TrackPreview.vue';
 
-const props = defineProps<{ list: Ref<Track[]>, dragGroup: string, letter: string }>();
-console.log(props.list);
-const classByLetter = {
+const props = defineProps<{ list: Track[], dragGroup: string, letter: string }>();
+const classByLetter: Record<string, string> = {
   S: 'bg-purple-700',
   A: 'bg-green-500',
   B: 'bg-yellow-400',

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {ref, watch} from 'vue'
 import debounce from 'lodash/debounce';
-import {fetchAlbums} from "../api/SpotifyApi";
-import type {AlbumSearch} from "../models/AlbumSearch";
+import {fetchAlbums} from "../SpotifyApi";
+import type {AlbumSearch} from "@/models/AlbumSearch";
 
 const results = ref<AlbumSearch[]>([]);
 const debouncedFunc = debounce(fetchAlbumsFromApi, 1000);

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Track} from "../models/Track";
+import type {Track} from "@/models/Track";
 
 const props = defineProps<{ track: Track; }>();
 

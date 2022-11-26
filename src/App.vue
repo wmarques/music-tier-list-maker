@@ -2,9 +2,9 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import SearchBar from "./components/SearchBar.vue";
-import {getToken, login} from "./api/SpotifyApi";
+import {getToken, login} from "./SpotifyApi";
 import {ref} from "vue";
-import {AlbumSearch} from "./models/AlbumSearch";
+import type {AlbumSearch} from "./models/AlbumSearch";
 import TierList from "./components/TierList.vue";
 
 
