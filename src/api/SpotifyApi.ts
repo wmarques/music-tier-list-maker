@@ -1,19 +1,24 @@
-import axios, { type AxiosInstance} from "axios";
+import axios, {type AxiosInstance} from "axios";
 import type {AlbumSearch} from "@/models/AlbumSearch";
 import type {Track} from "@/models/Track";
 import pkceChallenge from "pkce-challenge";
 
 const tokenStorageKey = 'spotifyToken';
+const refreshTokenStorageKey = 'refreshToken';
 const challengeStorageKey = 'challenge';
 const client_id = 'c8dc40c2295a4e40accf71adb171fbff';
 
 let spotifyInstance: AxiosInstance;
 spotifyInstance = axios.create({
-    baseURL: 'https://api.spotify.com/v1/',
-    headers: {
-        Authorization: 'Bearer ' + sessionStorage.getItem(tokenStorageKey)
-    }
+    baseURL: 'https://api.spotify.com/v1/'
 });
+spotifyInstance.interceptors.request.use(async (config) => {
+    config.headers = {
+        ...config.headers,
+        Authorization: 'Bearer ' + localStorage.getItem(tokenStorageKey)
+    }
+    return config;
+})
 
 export function login() {
     const challenge = pkceChallenge();
@@ -29,6 +34,19 @@ export function login() {
     });
 }
 
+export async function refreshToken() {
+    const data = new URLSearchParams();
+    data.append('grant_type', 'refresh_token');
+    data.append('refresh_token', localStorage.getItem(refreshTokenStorageKey) as string);
+    data.append('client_id', client_id,);
+    let response = await axios.post<any>('https://accounts.spotify.com/api/token', data, {
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+    });
+    localStorage.setItem(tokenStorageKey, response.data.access_token);
+}
+
 export async function getToken(code: string) {
     const data = new URLSearchParams();
     data.append('grant_type', 'authorization_code')
@@ -42,7 +60,8 @@ export async function getToken(code: string) {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
     });
-    sessionStorage.setItem(tokenStorageKey, response.data.access_token);
+    localStorage.setItem(refreshTokenStorageKey, response.data.refresh_token);
+    localStorage.setItem(tokenStorageKey, response.data.access_token);
 }
 
 
