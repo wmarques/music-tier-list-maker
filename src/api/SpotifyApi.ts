@@ -27,7 +27,7 @@ export function login() {
         url: 'https://accounts.spotify.com/authorize', params: {
             client_id,
             response_type: 'code',
-            redirect_uri: 'http://localhost:3000',
+            redirect_uri: `http://${window.location.host}`,
             code_challenge_method: "S256",
             code_challenge: challenge.code_challenge
         },
@@ -51,7 +51,7 @@ export async function getToken(code: string) {
     const data = new URLSearchParams();
     data.append('grant_type', 'authorization_code')
     data.append('code', code)
-    data.append('redirect_uri', 'http://localhost:3000');
+    data.append('redirect_uri', `http://${window.location.host}`);
     data.append('client_id', client_id,);
     data.append('code_verifier', localStorage.getItem(challengeStorageKey) as string);
 
